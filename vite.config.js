@@ -3,6 +3,26 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    port: 5173,
+    allowedHosts: [
+      'fprscq-5173.csb.app',
+      'localhost',
+      '127.0.0.1',
+      '0.0.0.0'
+    ]
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 4173,
+    allowedHosts: [
+      'fprscq-4173.csb.app',
+      'localhost',
+      '127.0.0.1',
+      '0.0.0.0'
+    ]
+  },
   build: {
     // Enable minification
     minify: 'terser',
@@ -44,9 +64,5 @@ export default defineConfig({
   optimizeDeps: {
     include: ['react', 'react-dom', 'react-router-dom'],
     exclude: ['lucide-react']
-  },
-  // Enable gzip compression
-  server: {
-    compress: true,
   },
 })
