@@ -1,30 +1,40 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { MotionDiv, fadeIn } from './utils/motion';
 import Header from './components/Header';
-import Home from './pages/Home';
-import SearchResults from './pages/SearchResults';
-import MovieDetail from './pages/MovieDetail';
-import WatchMovie from './pages/WatchMovie';
 import './App.css';
+
+// Lazy load components for better performance
+const Home = React.lazy(() => import('./pages/Home'));
+const SearchResults = React.lazy(() => import('./pages/SearchResults'));
+const MovieDetail = React.lazy(() => import('./pages/MovieDetail'));
+const WatchMovie = React.lazy(() => import('./pages/WatchMovie'));
+
+// Loading component for suspense fallback
+const Loading = () => (
+  <div className="loading-container">
+    <div className="loading-spinner"></div>
+    <p>Loading...</p>
+  </div>
+);
 
 function App() {
   return (
     <Router>
       <div className="App">
         <Header />
-        <motion.main
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+        <MotionDiv
+          {...fadeIn}
         >
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/search" element={<SearchResults />} />
-            <Route path="/movie/:id" element={<MovieDetail />} />
-            <Route path="/watch/:id" element={<WatchMovie />} />
-          </Routes>
-        </motion.main>
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/search" element={<SearchResults />} />
+              <Route path="/movie/:id" element={<MovieDetail />} />
+              <Route path="/watch/:id" element={<WatchMovie />} />
+            </Routes>
+          </Suspense>
+        </MotionDiv>
       </div>
     </Router>
   );

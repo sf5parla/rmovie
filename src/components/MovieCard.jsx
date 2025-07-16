@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Play, Eye } from 'lucide-react';
+import OptimizedImage from './OptimizedImage';
 
 const MovieCard = ({ movie }) => {
   const title = movie.title.length > 20 ? movie.title.substring(0, 20) + '...' : movie.title;
@@ -10,13 +10,27 @@ const MovieCard = ({ movie }) => {
     : 'https://via.placeholder.com/300x450/333/fff?text=No+Image';
 
   return (
-    <motion.div 
+    <div 
       className="movie-card"
-      whileHover={{ y: -8, scale: 1.02 }}
-      transition={{ duration: 0.3 }}
+      style={{
+        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
+        e.currentTarget.style.boxShadow = '0 16px 32px rgba(0,0,0,0.3)';
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = 'translateY(0) scale(1)';
+        e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.2)';
+      }}
     >
       <div className="movie-poster">
-        <img src={posterUrl} alt={movie.title} loading="lazy" />
+        <OptimizedImage 
+          src={posterUrl} 
+          alt={movie.title}
+          width="100%"
+          height="100%"
+        />
         <div className="movie-overlay">
           <div className="movie-actions">
             <Link to={`/movie/${movie.id}`} className="btn btn-primary">
@@ -44,7 +58,7 @@ const MovieCard = ({ movie }) => {
           </Link>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
